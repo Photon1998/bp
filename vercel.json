@@ -1,8 +1,6 @@
 {
-  "version": 2,
-  "routes": [
-    { "src": "/api/bpwatcher/(.*)", "dest": "/api/bpwatcher.js" },
-    { "src": "/api/backpack/(.*)",  "dest": "/api/backpack.js"  },
-    { "src": "/(.*)",               "dest": "/$1"               }
+  "rewrites": [
+    { "source": "/api/bpwatcher/:path*", "destination": "/api/bpwatcher?_p=:path*" },
+    { "source": "/api/backpack/:path*",  "destination": "/api/backpack?_p=:path*"  }
   ]
 }

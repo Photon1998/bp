@@ -2,8 +2,11 @@ const https = require('https');
 const { URL } = require('url');
 
 module.exports = function handler(req, res) {
-  const stripped = req.url.replace(/^\/api\/backpack/, '');
-  const target = new URL('https://api.backpack.exchange' + stripped);
+  const u = new URL(req.url, 'https://dummy.com');
+  const subpath = decodeURIComponent(u.searchParams.get('_p') || '');
+  u.searchParams.delete('_p');
+  const target = new URL('https://api.backpack.exchange/' + subpath + u.search);
+
   const options = {
     hostname: target.hostname,
     path: target.pathname + target.search,
@@ -13,9 +16,7 @@ module.exports = function handler(req, res) {
 
   const proxy = https.request(options, (upstream) => {
     res.statusCode = upstream.statusCode;
-    if (upstream.headers['content-type']) {
-      res.setHeader('content-type', upstream.headers['content-type']);
-    }
+    if (upstream.headers['content-type']) res.setHeader('content-type', upstream.headers['content-type']);
     res.setHeader('access-control-allow-origin', '*');
     upstream.pipe(res);
   });
