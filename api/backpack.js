@@ -15,4 +15,4 @@ module.exports = async function handler(req, res) {
   } catch (err) {
     res.status(502).json({ error: err.message });
   }
-}
+};

@@ -1,3 +1,8 @@
 {
-  "version": 2
+  "version": 2,
+  "routes": [
+    { "src": "/api/bpwatcher/(.*)", "dest": "/api/bpwatcher.js" },
+    { "src": "/api/backpack/(.*)",  "dest": "/api/backpack.js"  },
+    { "src": "/(.*)",               "dest": "/$1"               }
+  ]
 }
