@@ -1,18 +1,30 @@
-// Proxy for Backpack Exchange public API
-module.exports = async function handler(req, res) {
+const https = require('https');
+const { URL } = require('url');
+
+module.exports = function handler(req, res) {
   const stripped = req.url.replace(/^\/api\/backpack/, '');
-  const target = `https://api.backpack.exchange${stripped}`;
-  try {
-    const upstream = await fetch(target, {
-      method: req.method,
-      headers: { accept: 'application/json' },
-    });
-    const body = await upstream.arrayBuffer();
-    res.status(upstream.status);
-    res.setHeader('content-type', upstream.headers.get('content-type') || 'application/json');
+  const target = new URL('https://api.backpack.exchange' + stripped);
+  const options = {
+    hostname: target.hostname,
+    path: target.pathname + target.search,
+    method: req.method || 'GET',
+    headers: { accept: 'application/json' },
+  };
+
+  const proxy = https.request(options, (upstream) => {
+    res.statusCode = upstream.statusCode;
+    if (upstream.headers['content-type']) {
+      res.setHeader('content-type', upstream.headers['content-type']);
+    }
     res.setHeader('access-control-allow-origin', '*');
-    res.send(Buffer.from(body));
-  } catch (err) {
-    res.status(502).json({ error: err.message });
-  }
+    upstream.pipe(res);
+  });
+
+  proxy.on('error', (err) => {
+    res.statusCode = 502;
+    res.setHeader('content-type', 'application/json');
+    res.end(JSON.stringify({ error: err.message }));
+  });
+
+  proxy.end();
 };
