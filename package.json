@@ -1,0 +1,13 @@
+{
+  "name": "bp-staking-monitor",
+  "version": "1.0.0",
+  "description": "BP 質押率與拋壓監控",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "http-proxy-middleware": "^4.1.1"
+  }
+}

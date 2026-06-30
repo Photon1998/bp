@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/api/bpwatcher/(.*)", "destination": "/api/bpwatcher/[...path]" },
+    { "source": "/api/backpack/(.*)",  "destination": "/api/backpack/[...path]"  }
+  ]
+}
