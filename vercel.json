@@ -1,4 +1,6 @@
 {
+  "buildCommand": "",
+  "outputDirectory": ".",
   "rewrites": [
     { "source": "/api/bpwatcher/:path*", "destination": "/api/bpwatcher?_p=:path*" },
     { "source": "/api/backpack/:path*",  "destination": "/api/backpack?_p=:path*"  }
